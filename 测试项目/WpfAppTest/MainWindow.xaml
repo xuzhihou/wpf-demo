@@ -11,10 +11,35 @@
                HorizontalAlignment="Center"
                VerticalAlignment="Center"
                FontSize="24">
+            <Label.Template>
+                <ControlTemplate TargetType="Label">
+                    <Border Padding="10" BorderThickness="2">
+                        <Border.BorderBrush>
+                            <DrawingBrush TileMode="Tile" Viewport="0,0,20,10" ViewportUnits="Absolute">
+                                <DrawingBrush.Drawing>
+                                    <GeometryDrawing Brush="Transparent">
+                                        <GeometryDrawing.Pen>
+                                            <Pen Brush="Red" Thickness="2"/>
+                                        </GeometryDrawing.Pen>
+                                        <GeometryDrawing.Geometry>
+                                            <PathGeometry>
+                                                <PathFigure StartPoint="0,5" IsClosed="False">
+                                                    <BezierSegment Point1="5,0" Point2="15,10" Point3="20,5" />
+                                                </PathFigure>
+                                            </PathGeometry>
+                                        </GeometryDrawing.Geometry>
+                                    </GeometryDrawing>
+                                </DrawingBrush.Drawing>
+                            </DrawingBrush>
+                        </Border.BorderBrush>
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Label.Template>
             <Label.Foreground>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                    <GradientStop Color="Yellow" Offset="0"/>
-                    <GradientStop Color="Green" Offset="1"/>
+                    <GradientStop Color="Red" Offset="0"/>
+                    <GradientStop Color="Black" Offset="1"/>
                 </LinearGradientBrush>
             </Label.Foreground>
         </Label>
