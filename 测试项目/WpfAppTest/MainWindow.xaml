@@ -3,43 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="450" Width="800">
     <Canvas x:Name="mainCanvas">
-        <Label x:Name="movingLabel" Content="下一站"
-               FontSize="24"
-               HorizontalContentAlignment="Center"
-               VerticalContentAlignment="Center">
-            <Label.Template>
-                <ControlTemplate TargetType="Label">
-                    <Border Padding="10" BorderThickness="2">
-                        <Border.BorderBrush>
-                            <DrawingBrush TileMode="Tile" Viewport="0,0,20,10" ViewportUnits="Absolute">
-                                <DrawingBrush.Drawing>
-                                    <GeometryDrawing Brush="Transparent">
-                                        <GeometryDrawing.Pen>
-                                            <Pen Brush="Red" Thickness="2"/>
-                                        </GeometryDrawing.Pen>
-                                        <GeometryDrawing.Geometry>
-                                            <PathGeometry>
-                                                <PathFigure StartPoint="0,5" IsClosed="False">
-                                                    <BezierSegment Point1="5,0" Point2="15,10" Point3="20,5" />
-                                                </PathFigure>
-                                            </PathGeometry>
-                                        </GeometryDrawing.Geometry>
-                                    </GeometryDrawing>
-                                </DrawingBrush.Drawing>
-                            </DrawingBrush>
-                        </Border.BorderBrush>
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </Border>
-                </ControlTemplate>
-            </Label.Template>
-            <Label.Foreground>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                    <GradientStop Color="Red" Offset="0"/>
-                    <GradientStop Color="Black" Offset="1"/>
-                </LinearGradientBrush>
-            </Label.Foreground>
-        </Label>
-        <Button x:Name="movingButton" Content="测试"
-                Width="80" Height="30"/>
+        <!-- 已删除标签和按钮，只保留Canvas用于绘制圆点和连线 -->
     </Canvas>
 </Window>
