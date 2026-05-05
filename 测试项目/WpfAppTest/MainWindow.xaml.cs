@@ -16,9 +16,12 @@ namespace WpfAppTest
         private Random rand = new Random();
         private DispatcherTimer timer;
 
-        // 记录上一个点
         private double? lastX = null;
         private double? lastY = null;
+
+        // 按钮相关变量
+        private double btnX, btnY, btnDx = -50, btnDy = -50;
+        private double? btnLastX = null, btnLastY = null;
 
         public MainWindow()
         {
@@ -28,6 +31,14 @@ namespace WpfAppTest
             labelY = 0;
             MoveLabel();
 
+            // 按钮初始位置在右下角
+            mainCanvas.Loaded += (s, e) =>
+            {
+                btnX = mainCanvas.ActualWidth - movingButton.Width;
+                btnY = mainCanvas.ActualHeight - movingButton.Height;
+                MoveButton();
+            };
+
             timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(1);
             timer.Tick += Timer_Tick;
@@ -36,11 +47,10 @@ namespace WpfAppTest
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            // 记录当前位置
+            // 标签轨迹
             double prevX = labelX;
             double prevY = labelY;
 
-            // 随机方向
             double angle = rand.NextDouble() * 2 * Math.PI;
             dx = 50 * Math.Cos(angle);
             dy = 50 * Math.Sin(angle);
@@ -48,8 +58,8 @@ namespace WpfAppTest
             labelX += dx;
             labelY += dy;
 
-            double maxX = this.ActualWidth - movingLabel.ActualWidth - 40;
-            double maxY = this.ActualHeight - movingLabel.ActualHeight - 60;
+            double maxX = mainCanvas.ActualWidth - movingLabel.ActualWidth;
+            double maxY = mainCanvas.ActualHeight - movingLabel.ActualHeight;
 
             if (labelX < 0)
             {
@@ -81,52 +91,102 @@ namespace WpfAppTest
             if (labelY < 0) labelY = 0;
             if (labelY > maxY) labelY = maxY;
 
-            // 绘制轨迹
-            DrawTrail(prevX, prevY, labelX, labelY);
+            DrawTrail(prevX, prevY, labelX, labelY, movingLabel, Brushes.Red, ref lastX, ref lastY);
 
             MoveLabel();
+
+            // 按钮轨迹
+            double prevBtnX = btnX;
+            double prevBtnY = btnY;
+
+            double btnAngle = rand.NextDouble() * 2 * Math.PI;
+            btnDx = -50 * Math.Cos(btnAngle);
+            btnDy = -50 * Math.Sin(btnAngle);
+
+            btnX += btnDx;
+            btnY += btnDy;
+
+            double maxBtnX = mainCanvas.ActualWidth - movingButton.Width;
+            double maxBtnY = mainCanvas.ActualHeight - movingButton.Height;
+
+            if (btnX < 0)
+            {
+                btnX = 0;
+                btnDx = -btnDx;
+                btnX += btnDx;
+            }
+            else if (btnX > maxBtnX)
+            {
+                btnX = maxBtnX;
+                btnDx = -btnDx;
+                btnX += btnDx;
+            }
+            if (btnY < 0)
+            {
+                btnY = 0;
+                btnDy = -btnDy;
+                btnY += btnDy;
+            }
+            else if (btnY > maxBtnY)
+            {
+                btnY = maxBtnY;
+                btnDy = -btnDy;
+                btnY += btnDy;
+            }
+
+            if (btnX < 0) btnX = 0;
+            if (btnX > maxBtnX) btnX = maxBtnX;
+            if (btnY < 0) btnY = 0;
+            if (btnY > maxBtnY) btnY = maxBtnY;
+
+            DrawTrail(prevBtnX, prevBtnY, btnX, btnY, movingButton, Brushes.Black, ref btnLastX, ref btnLastY);
+
+            MoveButton();
         }
 
-        private void DrawTrail(double prevX, double prevY, double currX, double currY)
+        private void DrawTrail(double prevX, double prevY, double currX, double currY, FrameworkElement element, Brush color, ref double? lastTrailX, ref double? lastTrailY)
         {
-            // 圆心坐标为标签左上角+标签宽高一半
-            double centerX = prevX + movingLabel.ActualWidth / 2;
-            double centerY = prevY + movingLabel.ActualHeight / 2;
+            double centerX = prevX + element.ActualWidth / 2;
+            double centerY = prevY + element.ActualHeight / 2;
 
-            // 画圆
             Ellipse dot = new Ellipse
             {
                 Width = 4,
                 Height = 4,
-                Fill = Brushes.Red
+                Fill = color
             };
             Canvas.SetLeft(dot, centerX - 2);
             Canvas.SetTop(dot, centerY - 2);
             mainCanvas.Children.Add(dot);
 
-            // 画线
-            if (lastX.HasValue && lastY.HasValue)
+            if (lastTrailX.HasValue && lastTrailY.HasValue)
             {
                 Line line = new Line
                 {
-                    X1 = lastX.Value,
-                    Y1 = lastY.Value,
+                    X1 = lastTrailX.Value,
+                    Y1 = lastTrailY.Value,
                     X2 = centerX,
                     Y2 = centerY,
-                    Stroke = Brushes.Red,
+                    Stroke = color,
                     StrokeThickness = 1
                 };
                 mainCanvas.Children.Add(line);
             }
 
-            lastX = centerX;
-            lastY = centerY;
+            lastTrailX = centerX;
+            lastTrailY = centerY;
         }
 
         private void MoveLabel()
         {
             Canvas.SetLeft(movingLabel, labelX);
             Canvas.SetTop(movingLabel, labelY);
+        }
+
+        private void MoveButton()
+        {
+            Canvas.SetLeft(movingButton, btnX);
+            Canvas.SetTop(movingButton, btnY);
         }
     }
 }

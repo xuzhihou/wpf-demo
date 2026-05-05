@@ -39,5 +39,7 @@
                 </LinearGradientBrush>
             </Label.Foreground>
         </Label>
+        <Button x:Name="movingButton" Content="按钮"
+                Width="80" Height="30"/>
     </Canvas>
 </Window>
