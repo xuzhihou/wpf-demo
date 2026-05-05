@@ -23,6 +23,8 @@ namespace WpfAppTest
         private double btnX, btnY, btnDx = -50, btnDy = -50;
         private double? btnLastX = null, btnLastY = null;
 
+        private DispatcherTimer greenDotTimer = new DispatcherTimer();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -43,6 +45,11 @@ namespace WpfAppTest
             timer.Interval = TimeSpan.FromSeconds(1);
             timer.Tick += Timer_Tick;
             timer.Start();
+
+            // 绿色圆点定时器
+            greenDotTimer.Interval = TimeSpan.FromSeconds(1);
+            greenDotTimer.Tick += GreenDotTimer_Tick;
+            greenDotTimer.Start();
         }
 
         private void Timer_Tick(object sender, EventArgs e)
@@ -142,6 +149,24 @@ namespace WpfAppTest
             DrawTrail(prevBtnX, prevBtnY, btnX, btnY, movingButton, Brushes.Black, ref btnLastX, ref btnLastY);
 
             MoveButton();
+        }
+
+        private void GreenDotTimer_Tick(object sender, EventArgs e)
+        {
+            if (mainCanvas.ActualWidth < 4 || mainCanvas.ActualHeight < 4) return;
+
+            double x = rand.NextDouble() * (mainCanvas.ActualWidth - 4);
+            double y = rand.NextDouble() * (mainCanvas.ActualHeight - 4);
+
+            Ellipse dot = new Ellipse
+            {
+                Width = 4,
+                Height = 4,
+                Fill = Brushes.Green
+            };
+            Canvas.SetLeft(dot, x);
+            Canvas.SetTop(dot, y);
+            mainCanvas.Children.Add(dot);
         }
 
         private void DrawTrail(double prevX, double prevY, double currX, double currY, FrameworkElement element, Brush color, ref double? lastTrailX, ref double? lastTrailY)
