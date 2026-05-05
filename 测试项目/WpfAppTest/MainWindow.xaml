@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="450" Width="800">
     <Canvas x:Name="mainCanvas">
-        <Label x:Name="movingLabel" Content="nobody"
+        <Label x:Name="movingLabel" Content="下一站"
                FontSize="24"
                HorizontalContentAlignment="Center"
                VerticalContentAlignment="Center">
